@@ -20,24 +20,24 @@ fileprivate class DifferentialObservableList<T: Hashable>: ObservableList<T> {
         get {
             return stream
                 .map { (list: [T]) -> Update<T> in
-                    return Update<T>(list: list, changes: [Change.reload])
+                    return Update<T>(list: list, changes: [.reload])
                 }
                 .scan(Update(list: [], changes: [])) { (previous, next) -> Update<T> in
                     if (previous.changes.isEmpty) {
-                        return Update(list: next.list, changes: [Change.reload])
+                        return Update(list: next.list, changes: [.reload])
                     }
                     
                     return Update(list: next.list, changes: DeepDiff.diff(old: previous.list, new: next.list)
                         .map { (change) -> Change in
                             switch (change) {
                             case .insert(let insert):
-                                return Change.insert(index: insert.index)
+                                return .insert(index: insert.index)
                             case .delete(let delete):
-                                return Change.delete(index: delete.index)
+                                return .delete(index: delete.index)
                             case .move(let move):
-                                return Change.move(from: move.fromIndex, to: move.toIndex)
+                                return .move(from: move.fromIndex, to: move.toIndex)
                             case .replace(let replace):
-                                return Change.move(from: replace.index, to: replace.index)
+                                return .move(from: replace.index, to: replace.index)
                             }
                     })
             }

@@ -17,7 +17,7 @@ fileprivate class SingletonObservableList<T>: ObservableList<T> {
     
     override var updates: Observable<Update<T>> {
         get {
-            return Observable.just(Update(list: values, changes: [Change.reload]))
+            return Observable.just(Update(list: values, changes: [.reload]))
         }
     }
 }

@@ -231,6 +231,7 @@
 		7857D9BF20B07C99006AD26C /* ObservableListBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9BE20B07C99006AD26C /* ObservableListBinding.swift */; };
 		7857D9C120B0A2D1006AD26C /* ReplaySubjectMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */; };
 		7857D9C320B0B927006AD26C /* DifferentialObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */; };
+		78E2D13720B0C4E500449C50 /* SimpleObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78E2D13620B0C4E500449C50 /* SimpleObservableList.swift */; };
 		78FFC86662B21DA0E00F52A706605993 /* RxCocoa-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6811BA3DC6579F1B522376F57280C132 /* RxCocoa-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7A3EB7E5E578D64C9798E3D465F901BD /* DefaultIfEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D6B67F479B21AFC46F2268551CDF0E /* DefaultIfEmpty.swift */; };
 		7A87128C90FBADD3CF19C3EE521578A7 /* DeprecationWarner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978935E5518C44533A9366B499650DCB /* DeprecationWarner.swift */; };
@@ -826,6 +827,7 @@
 		7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DifferentialObservableList.swift; path = RxSwiftCollections/Classes/DifferentialObservableList.swift; sourceTree = "<group>"; };
 		786FB914B20E819CD1D904B33F6C58B3 /* QuickSelectedTestSuiteBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickSelectedTestSuiteBuilder.swift; path = Sources/Quick/QuickSelectedTestSuiteBuilder.swift; sourceTree = "<group>"; };
 		78E240C7C966856D3B93C1E983209B88 /* InfiniteSequence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InfiniteSequence.swift; path = Platform/DataStructures/InfiniteSequence.swift; sourceTree = "<group>"; };
+		78E2D13620B0C4E500449C50 /* SimpleObservableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = SimpleObservableList.swift; path = RxSwiftCollections/Classes/SimpleObservableList.swift; sourceTree = "<group>"; };
 		798973A26D45D92B5C7D84CCAD12329B /* Quick.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Quick.modulemap; sourceTree = "<group>"; };
 		798B37E0AC4556A5B27B4FD29C6377A9 /* Map.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Map.swift; path = RxSwift/Observables/Map.swift; sourceTree = "<group>"; };
 		79EADCD53C54A6A0DAB5607D2B9B144E /* SingleAssignmentDisposable.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SingleAssignmentDisposable.swift; path = RxSwift/Disposables/SingleAssignmentDisposable.swift; sourceTree = "<group>"; };
@@ -1271,11 +1273,12 @@
 			isa = PBXGroup;
 			children = (
 				C4E8D4DF6321869F3BB8EA3DDC65D366 /* ObservableList.swift */,
-				7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */,
-				BB1296EC6577472E60D6F88019D604D1 /* SingletonObservableList.swift */,
-				7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */,
 				7857D9BE20B07C99006AD26C /* ObservableListBinding.swift */,
+				7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */,
+				7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */,
 				7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */,
+				78E2D13620B0C4E500449C50 /* SimpleObservableList.swift */,
+				BB1296EC6577472E60D6F88019D604D1 /* SingletonObservableList.swift */,
 				118B25826E0AE924EB3F3C151B33678C /* Pod */,
 				025D135CEB63519C3360419E30BB5329 /* Support Files */,
 			);
@@ -2293,6 +2296,7 @@
 				7857D9BF20B07C99006AD26C /* ObservableListBinding.swift in Sources */,
 				F6D66252CF0AEF024ADF08FB2E823126 /* SingletonObservableList.swift in Sources */,
 				7857D9C120B0A2D1006AD26C /* ReplaySubjectMap.swift in Sources */,
+				78E2D13720B0C4E500449C50 /* SimpleObservableList.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
