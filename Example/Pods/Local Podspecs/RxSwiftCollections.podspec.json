@@ -1,0 +1,22 @@
+{
+  "name": "RxSwiftCollections",
+  "version": "0.1.0",
+  "summary": "A short description of RxSwiftCollections.",
+  "description": "TODO: Add long description of the pod here.",
+  "homepage": "https://github.com/mproberst/RxSwiftCollections",
+  "license": {
+    "type": "MIT",
+    "file": "LICENSE"
+  },
+  "authors": {
+    "Mike Roberts": "mike@mpr.io"
+  },
+  "source": {
+    "git": "https://github.com/mproberst/RxSwiftCollections.git",
+    "tag": "0.1.0"
+  },
+  "platforms": {
+    "ios": "8.0"
+  },
+  "source_files": "RxSwiftCollections/Classes/**/*"
+}

@@ -1,0 +1,6 @@
+framework module RxSwiftCollections {
+  umbrella header "RxSwiftCollections-umbrella.h"
+
+  export *
+  module * { export * }
+}

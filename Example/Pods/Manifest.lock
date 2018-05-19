@@ -1,0 +1,27 @@
+PODS:
+  - Nimble (7.0.3)
+  - Quick (1.2.0)
+  - RxSwiftCollections (0.1.0)
+
+DEPENDENCIES:
+  - Nimble (~> 7.0.2)
+  - Quick (~> 1.2.0)
+  - RxSwiftCollections (from `../`)
+
+SPEC REPOS:
+  https://github.com/cocoapods/specs.git:
+    - Nimble
+    - Quick
+
+EXTERNAL SOURCES:
+  RxSwiftCollections:
+    :path: "../"
+
+SPEC CHECKSUMS:
+  Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
+  Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
+  RxSwiftCollections: 6cd884aa10db7f4ca12f060c3f5ebbd78746391c
+
+PODFILE CHECKSUM: 5c6d27bba3ae4b61f71ab8fe8a878faf0fb9f0da
+
+COCOAPODS: 1.5.2
