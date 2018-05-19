@@ -17,5 +17,7 @@ Pod::Spec.new do |spec|
   spec.source_files = 'RxSwiftCollections/Classes/**/*'
   
   spec.frameworks = 'UIKit'
-  spec.dependency 'AFNetworking', '~> 2.3'
+  spec.dependency 'RxSwift',    '~> 4.0'
+  spec.dependency 'RxCocoa',    '~> 4.0'
+  spec.dependency 'DeepDiff',   '~> 1.2'
 end
