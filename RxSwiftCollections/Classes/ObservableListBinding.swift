@@ -36,21 +36,21 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
         return self.observableList.updates
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (update) in
-                self!.currentList = update.list
-                
                 collectionView.performBatchUpdates({
+                    self!.currentList = update.list
+                    
                     update.changes.forEach({ (change) in
                         switch (change) {
-                        case Change.insert(let index):
-                            collectionView.insertItems(at: [IndexPath(index: index)])
+                        case .insert(let index):
+                            collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
                             break
-                        case Change.delete(let index):
-                            collectionView.deleteItems(at: [IndexPath(index: index)])
+                        case .delete(let index):
+                            collectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
                             break
-                        case Change.move(let from, let to):
-                            collectionView.moveItem(at: IndexPath(index: from), to: IndexPath(index: to))
+                        case .move(let from, let to):
+                            collectionView.moveItem(at: IndexPath(item: from, section: 0), to: IndexPath(item: to, section: 0))
                             break
-                        case Change.reload:
+                        case .reload:
                             collectionView.reloadData()
                             break
                         }
