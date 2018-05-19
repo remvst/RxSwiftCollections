@@ -34,6 +34,12 @@ extension ViewController {
     
     func setup() {
         ObservableList<String>.of([Int](1...256))
-            .map { "Test \($0)" }
+            .map { "\($0)" }
+            .bind(to: self.collectionView, reusing: "Demo", with: { (cell, text) -> DemoCollectionViewCell in
+                cell.titleLabel.text = text
+                
+                return cell
+            })
+            .disposed(by: disposeBag)
     }
 }
