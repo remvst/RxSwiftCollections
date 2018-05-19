@@ -33,8 +33,22 @@ class ViewController: UIViewController {
 extension ViewController {
     
     func setup() {
-        ObservableList<String>.of([Int](1...256))
-            .map { "\($0)" }
+        let list: SimpleObservableList<Int> = SimpleObservableList([Int](1...10))
+        let tick: Observable<Int> = Observable.interval(0.2, scheduler: MainScheduler.instance)
+            
+        tick
+            .subscribe { event in
+                guard case let .next(data) = event else {
+                    return
+                }
+                
+                list.append(data + 11)
+            }
+            .disposed(by: disposeBag)
+        
+        // ObservableList<String>.of([Int](1...256))
+        
+        list.map { "\($0)" }
             .bind(to: self.collectionView, reusing: "Demo", with: { (cell, text) -> DemoCollectionViewCell in
                 cell.titleLabel.text = text
                 
