@@ -1,5 +1,5 @@
 //
-//  SubjectMap.swift
+//  ReplaySubjectMap.swift
 //  RxSwiftCollections
 //
 //  Created by Mike Roberts on 2018-05-19.
@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-class SubjectMap<KeyType: AnyObject, ValueType: AnyObject>: NSObject {
+class ReplaySubjectMap<KeyType: AnyObject, ValueType: AnyObject>: NSObject {
     
     private let sources: NSMapTable<KeyType, ReplaySubject<ValueType>> = NSMapTable(keyOptions: NSPointerFunctions.Options.strongMemory,
                                                                                     valueOptions: NSPointerFunctions.Options.strongMemory)
@@ -46,7 +46,7 @@ class SubjectMap<KeyType: AnyObject, ValueType: AnyObject>: NSObject {
     }
 }
 
-extension SubjectMap {
+extension ReplaySubjectMap {
     
     public func onNext(key: KeyType, _ generator: (() -> ValueType)) {
         on(key: key) {
