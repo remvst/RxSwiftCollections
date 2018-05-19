@@ -230,6 +230,7 @@
 		7857D9BD20B07A3F006AD26C /* MappedObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */; };
 		7857D9BF20B07C99006AD26C /* ObservableListBinding.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9BE20B07C99006AD26C /* ObservableListBinding.swift */; };
 		7857D9C120B0A2D1006AD26C /* ReplaySubjectMap.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */; };
+		7857D9C320B0B927006AD26C /* DifferentialObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */; };
 		78FFC86662B21DA0E00F52A706605993 /* RxCocoa-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6811BA3DC6579F1B522376F57280C132 /* RxCocoa-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		7A3EB7E5E578D64C9798E3D465F901BD /* DefaultIfEmpty.swift in Sources */ = {isa = PBXBuildFile; fileRef = A1D6B67F479B21AFC46F2268551CDF0E /* DefaultIfEmpty.swift */; };
 		7A87128C90FBADD3CF19C3EE521578A7 /* DeprecationWarner.swift in Sources */ = {isa = PBXBuildFile; fileRef = 978935E5518C44533A9366B499650DCB /* DeprecationWarner.swift */; };
@@ -822,6 +823,7 @@
 		7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = MappedObservableList.swift; path = RxSwiftCollections/Classes/MappedObservableList.swift; sourceTree = "<group>"; };
 		7857D9BE20B07C99006AD26C /* ObservableListBinding.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ObservableListBinding.swift; path = RxSwiftCollections/Classes/ObservableListBinding.swift; sourceTree = "<group>"; };
 		7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = ReplaySubjectMap.swift; path = RxSwiftCollections/Classes/ReplaySubjectMap.swift; sourceTree = "<group>"; };
+		7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = DifferentialObservableList.swift; path = RxSwiftCollections/Classes/DifferentialObservableList.swift; sourceTree = "<group>"; };
 		786FB914B20E819CD1D904B33F6C58B3 /* QuickSelectedTestSuiteBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickSelectedTestSuiteBuilder.swift; path = Sources/Quick/QuickSelectedTestSuiteBuilder.swift; sourceTree = "<group>"; };
 		78E240C7C966856D3B93C1E983209B88 /* InfiniteSequence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InfiniteSequence.swift; path = Platform/DataStructures/InfiniteSequence.swift; sourceTree = "<group>"; };
 		798973A26D45D92B5C7D84CCAD12329B /* Quick.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Quick.modulemap; sourceTree = "<group>"; };
@@ -1268,13 +1270,14 @@
 		1AE7E9A50B6C9B1E10E640A4FF31DAEC /* RxSwiftCollections */ = {
 			isa = PBXGroup;
 			children = (
-				7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */,
 				C4E8D4DF6321869F3BB8EA3DDC65D366 /* ObservableList.swift */,
+				7857D9BC20B07A3F006AD26C /* MappedObservableList.swift */,
 				BB1296EC6577472E60D6F88019D604D1 /* SingletonObservableList.swift */,
+				7857D9C220B0B927006AD26C /* DifferentialObservableList.swift */,
 				7857D9BE20B07C99006AD26C /* ObservableListBinding.swift */,
+				7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */,
 				118B25826E0AE924EB3F3C151B33678C /* Pod */,
 				025D135CEB63519C3360419E30BB5329 /* Support Files */,
-				7857D9C020B0A2D1006AD26C /* ReplaySubjectMap.swift */,
 			);
 			name = RxSwiftCollections;
 			path = ../..;
@@ -2283,6 +2286,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7857D9C320B0B927006AD26C /* DifferentialObservableList.swift in Sources */,
 				635A4904A80FAC78DEB7C18AA051C69E /* ObservableList.swift in Sources */,
 				7857D9BD20B07A3F006AD26C /* MappedObservableList.swift in Sources */,
 				CA8E2472910BFCFE5D65F7893712855C /* RxSwiftCollections-dummy.m in Sources */,
