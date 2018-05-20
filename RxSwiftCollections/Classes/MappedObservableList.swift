@@ -17,12 +17,12 @@ fileprivate class MappedObservableList<T, U>: ObservableList<U> {
         self.transform = transform
     }
     
-    override var updates: Observable<Update<U>> {
+    public override var updates: Observable<Update<U>> {
         get {
+            let transform = self.transform
+            
             return list.updates
-                .map { [weak self] in
-                    return Update(list: $0.list.lazy.map(self!.transform), changes: $0.changes)
-            }
+                .map { Update(list: $0.list.lazy.map(transform), changes: $0.changes) }
         }
     }
 }
