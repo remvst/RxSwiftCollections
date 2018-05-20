@@ -10,24 +10,24 @@ import RxSwift
 
 /// Another useful function
 /// - parameters:
-/// - alpha: Describe the alpha param
-/// - beta: Describe the beta param
+///   - alpha: Describe the alpha param
+///   - beta: Describe the beta param
 public enum Change {
     /// Represents the insertion of a new item in the list
     /// - parameters:
-    /// - index: The position at which a new item was inserted
+    ///   - index: The position at which a new item was inserted
     case insert(index: Int)
     
     /// Represents the deletion of an item from the list
     /// - parameters:
-    /// - index: The position at which the deletion occurred
+    ///   - index: The position at which the deletion occurred
     case delete(index: Int)
     
     /// Represents a move of an element from a source position to
     /// the destination
     /// - parameters:
-    /// - from: The original index of the item in the list
-    /// - to: The target index within the list
+    ///   - from: The original index of the item in the list
+    ///   - to: The target index within the list
     case move(from: Int, to: Int)
     
     /// The complete, underlying list should be reloaded
