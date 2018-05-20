@@ -49,7 +49,6 @@ extension ViewController {
         let upperBound = 1000
         let original = Array([Int](1...upperBound))
         let randomIntStream: Observable<[Int]> = Observable<Int>.interval(2.0, scheduler: MainScheduler.instance)
-            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
             .scan(original, accumulator: { (previous, step) -> [Int] in
                 var next = Array(previous)
                 
@@ -72,9 +71,8 @@ extension ViewController {
             })
             .asObservable()
             
-        ObservableList<Int>.diff(randomIntStream)
+        ObservableList<Int>.diff(randomIntStream.observeOn(ConcurrentDispatchQueueScheduler(qos: .background)))
             .map { "\($0)" }
-            .updates
             .bind(to: self.collectionView, reusing: "Demo", with: { (cell, text) -> DemoCollectionViewCell in
                 cell.titleLabel.text = text
                 

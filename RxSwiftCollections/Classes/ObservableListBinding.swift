@@ -92,17 +92,27 @@ fileprivate class AssociatedObjectDisposable: Disposable {
 
 public extension Observable {
     
-    func bind<CellType: UICollectionViewCell, T>(to collectionView: UICollectionView,
+    func bind<CellType: UICollectionViewCell, T: Hashable>(to collectionView: UICollectionView,
+                                                           reusing reuseIdentifier: String,
+                                                           with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable where E == [T] {
+        return ObservableList<T>.diff(self)
+            .bind(to: collectionView, reusing: reuseIdentifier, with: adapter)
+    }
+}
+
+public extension ObservableList {
+    
+    func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
                                               reusing reuseIdentifier: String,
-                                              with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable where E == Update<T> {
+                                              with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable {
         return bind(to: collectionView,
                     reusing: reuseIdentifier,
                     with: { cell, indexPath, value -> CellType in return adapter(cell, value) })
     }
     
-    func bind<CellType: UICollectionViewCell, T>(to collectionView: UICollectionView,
+    func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
                                               reusing reuseIdentifier: String,
-                                              with adapter: @escaping ((CellType, IndexPath, T) -> CellType)) -> Disposable where E == Update<T> {
+                                              with adapter: @escaping ((CellType, IndexPath, T) -> CellType)) -> Disposable {
         return bind(to: collectionView,
                     with: { collectionView, indexPath, value -> CellType in
                         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CellType
@@ -111,9 +121,9 @@ public extension Observable {
         })
     }
     
-    func bind<CellType: UICollectionViewCell, T>(to collectionView: UICollectionView,
-                                              with adapter: @escaping ((UICollectionView, IndexPath, T) -> CellType)) -> Disposable where E == Update<T> {
-        let dataSource = ObservableListDataSource(list: self, cellCreator: adapter)
+    func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
+                                              with adapter: @escaping ((UICollectionView, IndexPath, T) -> CellType)) -> Disposable {
+        let dataSource = ObservableListDataSource(list: self.updates, cellCreator: adapter)
         let disposable = dataSource.bind(to: collectionView)
         
         collectionView.dataSource = dataSource
