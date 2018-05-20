@@ -8,6 +8,9 @@
 import Foundation
 import RxSwift
 
+/// A basic implementation of a mutable, reactive list. Standard sequence
+/// operations can be used to apply changes to the list. When changes are
+/// made, the list will emit updates to any listeners
 public class SimpleObservableList<T>: ObservableList<T> {
     private var currentList: [T]?
     private let subject: PublishSubject<Update<T>> = PublishSubject()
@@ -39,6 +42,10 @@ public class SimpleObservableList<T>: ObservableList<T> {
 }
 
 public extension SimpleObservableList {
+    
+    /// Appends the supplied `element` to the current list
+    /// - parameters:
+    ///   - element: The value to be added to the underlying sequence
     func append(_ element: T) {
         update { previous -> Update<T> in
             var next = Array(previous)
@@ -49,6 +56,10 @@ public extension SimpleObservableList {
         }
     }
     
+    /// Inserts the supplied `element` in the current list, at the position specified
+    /// - parameters:
+    ///   - element: The element to be added to the underlying sequence
+    ///   - at: The position at which to add `element`
     func insert(_ element: T, at: Int) {
         update { previous -> Update<T> in
             var next = Array(previous)
@@ -59,6 +70,9 @@ public extension SimpleObservableList {
         }
     }
     
+    /// Removes the element from the current list, at the position specified
+    /// - parameters:
+    ///   - at: The position at which to remove the existing element
     func remove(at: Int) {
         update { previous -> Update<T> in
             var next = Array(previous)
@@ -69,6 +83,7 @@ public extension SimpleObservableList {
         }
     }
     
+    /// Removes all elements from the current list
     func removeAll() {
         update { previous -> Update<T> in
             return Update(list: [], changes: [.reload])
