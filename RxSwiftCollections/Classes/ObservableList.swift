@@ -16,8 +16,8 @@ public enum Change {
 }
 
 public class Update<T> {
-    let list: [T]
-    let changes: [Change]
+    public var list: [T]
+    public var changes: [Change]
     
     init(list: [T], changes: [Change]) {
         self.list = list
@@ -26,7 +26,7 @@ public class Update<T> {
 }
 
 public class ObservableList<T> {
-    var updates: Observable<Update<T>> {
+    public var updates: Observable<Update<T>> {
         get {
             assertionFailure("Don't call me directly")
             

@@ -31,7 +31,7 @@ public class SimpleObservableList<T>: ObservableList<T> {
         currentList = update.list
     }
     
-    override var updates: Observable<Update<T>> {
+    public override var updates: Observable<Update<T>> {
         return subject
             .startWith(Update(list: currentList ?? [], changes: [.reload]))
             .asObservable()
