@@ -10,6 +10,14 @@ import UIKit
 import RxSwift
 import RxSwiftCollections
 
+extension Array {
+    mutating func shuffle() {
+        for _ in 0..<((count>0) ? (count-1) : 0) {
+            sort { (_,_) in arc4random() < arc4random() }
+        }
+    }
+}
+
 class ViewController: UIViewController {
 
     @IBOutlet weak var collectionView: UICollectionView!
@@ -30,25 +38,43 @@ class ViewController: UIViewController {
     }
 }
 
+func randomInt(_ upperBound: Int) -> Int {
+    return Int(arc4random_uniform(UInt32(upperBound)))
+}
+
 extension ViewController {
     
     func setup() {
-        let list: SimpleObservableList<Int> = SimpleObservableList([Int](1...10))
-        let tick: Observable<Int> = Observable.interval(0.2, scheduler: MainScheduler.instance)
-            
-        tick
-            .subscribe { event in
-                guard case let .next(data) = event else {
-                    return
+        let removeCount = 100
+        let upperBound = 1000
+        let original = Array([Int](1...upperBound))
+        let randomIntStream: Observable<[Int]> = Observable<Int>.interval(2.0, scheduler: MainScheduler.instance)
+            .observeOn(ConcurrentDispatchQueueScheduler(qos: .background))
+            .scan(original, accumulator: { (previous, step) -> [Int] in
+                var next = Array(previous)
+                
+                // remove some numbers
+                for _ in 0...randomInt(removeCount) {
+                    next.remove(at: randomInt(next.count))
                 }
                 
-                list.append(data + 11)
-            }
-            .disposed(by: disposeBag)
-        
-        // ObservableList<String>.of([Int](1...256))
-        
-        list.map { "\($0)" }
+                // add some numbers back
+                let additions = original.filter({ (number) -> Bool in !previous.contains(number) })
+                
+                if !additions.isEmpty {
+                    for i in 0...randomInt(additions.count) {
+                        let position = randomInt(next.count)
+                        next.insert(additions[i], at: position)
+                    }
+                }
+                
+                return next
+            })
+            .asObservable()
+            
+        ObservableList<Int>.diff(randomIntStream)
+            .map { "\($0)" }
+            .updates
             .bind(to: self.collectionView, reusing: "Demo", with: { (cell, text) -> DemoCollectionViewCell in
                 cell.titleLabel.text = text
                 
