@@ -29,13 +29,19 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        return cellCreator(collectionView, indexPath, self.currentList![indexPath.item])
+        let item = self.currentList![indexPath.item]
+        
+        return cellCreator(collectionView, indexPath, item)
     }
     
     func bind(to collectionView: UICollectionView) -> Disposable {
         return self.observableList
             .observeOn(MainScheduler.instance)
             .subscribe(onNext: { [weak self] (update) in
+                guard let this = self else {
+                    return
+                }
+                
                 guard update.changes.first(where: { (change) -> Bool in
                     if case .reload = change {
                         return true
@@ -43,14 +49,14 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
                     
                     return false
                 }) == nil else {
-                    self!.currentList = update.list
+                    this.currentList = update.list
                     collectionView.reloadData()
                     
                     return
                 }
                 
                 collectionView.performBatchUpdates({
-                    self!.currentList = update.list
+                    this.currentList = update.list
                     
                     update.changes.forEach({ (change) in
                         switch (change) {

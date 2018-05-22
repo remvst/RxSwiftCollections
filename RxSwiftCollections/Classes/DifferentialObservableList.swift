@@ -50,5 +50,3 @@ public extension ObservableList {
         return DifferentialObservableList(values)
     }
 }
-
-
