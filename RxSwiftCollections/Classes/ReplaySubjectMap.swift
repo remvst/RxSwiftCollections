@@ -10,8 +10,9 @@ import RxSwift
 
 class ReplaySubjectMap<KeyType: AnyObject, ValueType: AnyObject>: NSObject {
     
-    private let sources: NSMapTable<KeyType, ReplaySubject<ValueType>> = NSMapTable(keyOptions: NSPointerFunctions.Options.strongMemory,
-                                                                                    valueOptions: NSPointerFunctions.Options.strongMemory)
+    private let sources: NSMapTable<KeyType, ReplaySubject<ValueType>> =
+        NSMapTable(keyOptions: NSPointerFunctions.Options.strongMemory,
+                   valueOptions: NSPointerFunctions.Options.strongMemory)
     
     private func source(forKey key: KeyType) -> ReplaySubject<ValueType> {
         guard let cachedSource = sources.object(forKey: key) else {

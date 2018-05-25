@@ -8,10 +8,7 @@
 import Foundation
 import RxSwift
 
-/// Another useful function
-/// - parameters:
-///   - alpha: Describe the alpha param
-///   - beta: Describe the beta param
+/// Describes a change of an element in the list
 public enum Change {
     /// Represents the insertion of a new item in the list
     /// - parameters:
@@ -56,10 +53,8 @@ public class ObservableList<T> {
     
     /// The stream of updates to the underlying reactive list
     public var updates: Observable<Update<T>> {
-        get {
-            assertionFailure("Don't call me directly")
-            
-            return Observable.just(Update(list: [], changes: []))
-        }
+        assertionFailure("Don't call me directly")
+        
+        return Observable.just(Update(list: [], changes: []))
     }
 }
