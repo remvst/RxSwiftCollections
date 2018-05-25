@@ -9,7 +9,7 @@ import Foundation
 import RxSwift
 import DeepDiff
 
-fileprivate class DifferentialObservableList<T: Hashable>: ObservableList<T> {
+private class DifferentialObservableList<T: Hashable>: ObservableList<T> {
     private let stream: Observable<[T]>
     
     init(_ stream: Observable<[T]>) {
@@ -17,30 +17,28 @@ fileprivate class DifferentialObservableList<T: Hashable>: ObservableList<T> {
     }
     
     override var updates: Observable<Update<T>> {
-        get {
-            return stream
-                .map { (list: [T]) -> Update<T> in
-                    return Update<T>(list: list, changes: [.reload])
-                }
-                .scan(Update(list: [], changes: [])) { (previous, next) -> Update<T> in
-                    if (previous.changes.isEmpty) {
-                        return Update(list: next.list, changes: [.reload])
-                    }
-                    
-                    return Update(list: next.list, changes: DeepDiff.diff(old: previous.list, new: next.list)
-                        .map { (change) -> Change in
-                            switch (change) {
-                            case .insert(let insert):
-                                return .insert(index: insert.index)
-                            case .delete(let delete):
-                                return .delete(index: delete.index)
-                            case .move(let move):
-                                return .move(from: move.fromIndex, to: move.toIndex)
-                            case .replace(let replace):
-                                return .move(from: replace.index, to: replace.index)
-                            }
-                    })
+        return stream
+            .map { (list: [T]) -> Update<T> in
+                return Update<T>(list: list, changes: [.reload])
             }
+            .scan(Update(list: [], changes: [])) { (previous, next) -> Update<T> in
+                if previous.changes.isEmpty {
+                    return Update(list: next.list, changes: [.reload])
+                }
+                
+                return Update(list: next.list, changes: DeepDiff.diff(old: previous.list, new: next.list)
+                    .map { (change) -> Change in
+                        switch change {
+                        case .insert(let insert):
+                            return .insert(index: insert.index)
+                        case .delete(let delete):
+                            return .delete(index: delete.index)
+                        case .move(let move):
+                            return .move(from: move.fromIndex, to: move.toIndex)
+                        case .replace(let replace):
+                            return .move(from: replace.index, to: replace.index)
+                        }
+                })
         }
     }
 }

@@ -12,8 +12,8 @@ import RxSwiftCollections
 
 extension Array {
     mutating func shuffle() {
-        for _ in 0..<((count>0) ? (count-1) : 0) {
-            sort { (_,_) in arc4random() < arc4random() }
+        for _ in 0..<(!isEmpty ? (count - 1) : 0) {
+            sort { (_, _) in arc4random() < arc4random() }
         }
     }
 }
@@ -48,8 +48,9 @@ extension ViewController {
         let removeCount = 100
         let upperBound = 1000
         let original = Array([Int](1...upperBound))
-        let randomIntStream: Observable<[Int]> = Observable<Int>.interval(2.0, scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
-            .scan(original, accumulator: { (previous, step) -> [Int] in
+        let randomIntStream = Observable<Int>
+            .interval(2.0, scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
+            .scan(original, accumulator: { (previous, _) -> [Int] in
                 var next = Array(previous)
                 
                 // remove some numbers

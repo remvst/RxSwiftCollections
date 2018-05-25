@@ -85,7 +85,7 @@ public extension SimpleObservableList {
     
     /// Removes all elements from the current list
     func removeAll() {
-        update { previous -> Update<T> in
+        update { _ -> Update<T> in
             return Update(list: [], changes: [.reload])
         }
     }

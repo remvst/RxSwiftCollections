@@ -1,6 +1,9 @@
 use_frameworks!
 
 target 'RxSwiftCollections_Example' do
+  
+  inhibit_all_warnings!
+
   pod 'RxSwiftCollections', :path => '../'
 
   pod 'RxSwift',    '~> 4.0'
@@ -15,4 +18,5 @@ target 'RxSwiftCollections_Example' do
     pod 'RxBlocking', '~> 4.0'
     pod 'RxTest',     '~> 4.0'
   end
+  
 end

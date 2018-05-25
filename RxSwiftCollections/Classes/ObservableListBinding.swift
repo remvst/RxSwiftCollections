@@ -7,7 +7,7 @@
 
 import RxSwift
 
-fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource {
+private class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource {
     
     private var currentList: [T]?
     private let observableList: Observable<Update<T>>
@@ -15,7 +15,8 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
     
     var disposable: Disposable!
     
-    init(list: Observable<Update<T>>, cellCreator: @escaping ((UICollectionView, IndexPath, T) -> UICollectionViewCell)) {
+    init(list: Observable<Update<T>>,
+         cellCreator: @escaping ((UICollectionView, IndexPath, T) -> UICollectionViewCell)) {
         self.observableList = list
         self.cellCreator = cellCreator
     }
@@ -25,12 +26,14 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
     }
     
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        return self.currentList?.count ?? 0
+        return currentList?.count ?? 0
     }
     
-    func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        let item = self.currentList![indexPath.item]
-        
+    func collectionView(_ collectionView: UICollectionView,
+                        cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        // swiftlint:disable:next force_unwrapping
+        let item = currentList![indexPath.item]
+
         return cellCreator(collectionView, indexPath, item)
     }
     
@@ -58,30 +61,27 @@ fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSou
                 collectionView.performBatchUpdates({
                     this.currentList = update.list
                     
-                    update.changes.forEach({ (change) in
-                        switch (change) {
+                    update.changes.forEach { change in
+                        switch change {
                         case .insert(let index):
                             collectionView.insertItems(at: [IndexPath(item: index, section: 0)])
-                            break
                         case .delete(let index):
                             collectionView.deleteItems(at: [IndexPath(item: index, section: 0)])
-                            break
                         case .move(let from, let to):
-                            collectionView.moveItem(at: IndexPath(item: from, section: 0), to: IndexPath(item: to, section: 0))
-                            break
+                            collectionView.moveItem(at: IndexPath(item: from, section: 0),
+                                                    to: IndexPath(item: to, section: 0))
                         case .reload:
                             break
                         }
-                    })
-                }, completion: { complete in })
-            }, onError: { (error) in
+                    }
+                }, completion: { _ in })
+            }, onError: { (_) in
             }, onCompleted: {
-            }) {
-        }
+            })
     }
 }
 
-fileprivate class AssociatedObjectDisposable: Disposable {
+private class AssociatedObjectDisposable: Disposable {
     var retained: AnyObject!
     let disposable: Disposable
     
@@ -91,13 +91,14 @@ fileprivate class AssociatedObjectDisposable: Disposable {
     }
     
     func dispose() {
-        self.retained = nil
-        self.disposable.dispose()
+        retained = nil
+        disposable.dispose()
     }
 }
 
+// swiftlint:disable line_length
+
 public extension Observable {
-    
     func bind<CellType: UICollectionViewCell, T: Hashable>(to collectionView: UICollectionView,
                                                            reusing reuseIdentifier: String,
                                                            with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable where E == [T] {
@@ -113,7 +114,7 @@ public extension ObservableList {
                                               with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable {
         return bind(to: collectionView,
                     reusing: reuseIdentifier,
-                    with: { cell, indexPath, value -> CellType in return adapter(cell, value) })
+                    with: { cell, _, value -> CellType in return adapter(cell, value) })
     }
     
     func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
@@ -121,6 +122,8 @@ public extension ObservableList {
                                               with adapter: @escaping ((CellType, IndexPath, T) -> CellType)) -> Disposable {
         return bind(to: collectionView,
                     with: { collectionView, indexPath, value -> CellType in
+                        
+                        // swiftlint:disable:next force_cast
                         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CellType
                         
                         return adapter(cell, indexPath, value)
@@ -137,3 +140,5 @@ public extension ObservableList {
         return AssociatedObjectDisposable(retaining: dataSource, disposing: disposable)
     }
 }
+
+// swiftlint:enable line_length
