@@ -12,6 +12,7 @@ import RxSwift
 /// - parameters:
 ///   - alpha: Describe the alpha param
 ///   - beta: Describe the beta param
+
 public enum Change {
     /// Represents the insertion of a new item in the list
     /// - parameters:
@@ -40,10 +41,15 @@ public enum Change {
 /// list is a complete, immutable copy of all data present in the underlying
 /// list at the instant this update was emitted
 public class Update<T> {
-    public var list: [T]
+    public var list: LazyCollection<[T]>
     public var changes: [Change]
     
     init(list: [T], changes: [Change]) {
+        self.list = list.lazy
+        self.changes = changes
+    }
+    
+    init(list: LazyCollection<[T]>, changes: [Change]) {
         self.list = list
         self.changes = changes
     }

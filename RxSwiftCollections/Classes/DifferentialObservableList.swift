@@ -26,8 +26,8 @@ fileprivate class DifferentialObservableList<T: Hashable>: ObservableList<T> {
                     if (previous.changes.isEmpty) {
                         return Update(list: next.list, changes: [.reload])
                     }
-                    
-                    return Update(list: next.list, changes: DeepDiff.diff(old: previous.list, new: next.list)
+                
+                    return Update(list: next.list, changes: DeepDiff.diff(old: previous.list.elements, new: next.list.elements)
                         .map { (change) -> Change in
                             switch (change) {
                             case .insert(let insert):

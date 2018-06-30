@@ -31,7 +31,7 @@ public class SimpleObservableList<T>: ObservableList<T> {
         let update = updater(listCopy)
     
         subject.onNext(update)
-        currentList = update.list
+        currentList = update.list.elements
     }
     
     public override var updates: Observable<Update<T>> {

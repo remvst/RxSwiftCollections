@@ -9,7 +9,7 @@ import RxSwift
 
 fileprivate class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource {
     
-    private var currentList: [T]?
+    private var currentList: LazyCollection<[T]>?
     private let observableList: Observable<Update<T>>
     private let cellCreator: ((UICollectionView, IndexPath, T) -> UICollectionViewCell)
     
