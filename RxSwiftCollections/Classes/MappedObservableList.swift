@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-fileprivate class MappedObservableList<T, U>: ObservableList<U> {
+private class MappedObservableList<T, U>: ObservableList<U> {
     private let list: ObservableList<T>
     private let transform: ((T) -> U)
     
@@ -18,12 +18,10 @@ fileprivate class MappedObservableList<T, U>: ObservableList<U> {
     }
     
     public override var updates: Observable<Update<U>> {
-        get {
-            let transform = self.transform
-            
-            return list.updates
-                .map { Update(list: $0.list.lazy.map(transform), changes: $0.changes) }
-        }
+        let transform = self.transform
+        
+        return list.updates
+            .map { Update(list: $0.list.lazy.map(transform), changes: $0.changes) }
     }
 }
 

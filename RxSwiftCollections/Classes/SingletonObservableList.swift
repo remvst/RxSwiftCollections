@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-fileprivate class SingletonObservableList<T>: ObservableList<T> {
+private class SingletonObservableList<T>: ObservableList<T> {
     private let values: [T]
     
     init(_ values: [T]) {
@@ -16,9 +16,7 @@ fileprivate class SingletonObservableList<T>: ObservableList<T> {
     }
     
     override var updates: Observable<Update<T>> {
-        get {
-            return Observable.just(Update(list: values, changes: [.reload]))
-        }
+        return Observable.just(Update(list: values, changes: [.reload]))
     }
 }
 

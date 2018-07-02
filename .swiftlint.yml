@@ -1,0 +1,34 @@
+disabled_rules: # rule identifiers to exclude from running
+  - trailing_whitespace
+opt_in_rules:
+  - closure_spacing
+  - conditional_returns_on_newline
+  - contains_over_first_not_nil
+  - empty_count
+  - empty_string
+  - fallthrough
+  - fatal_error_message
+  - force_unwrapping
+  - operator_usage_whitespace
+  - operator_whitespace
+  - overridden_super_call
+line_length: 120
+type_body_length:
+  warning: 300
+  error: 400
+included:
+  - RxSwiftCollections/
+  - Example/RxSwiftCollections/
+excluded:
+  - Example/Pods/
+file_length:
+  warning: 500
+  error: 1200
+identifier_name:
+  excluded: # excluded via string array
+    - id
+    - URL
+    - to
+    - at
+    - i
+reporter: "xcode" # reporter type (xcode, json, csv, checkstyle, junit, html, emoji)

@@ -8,7 +8,7 @@
 import Foundation
 import RxSwift
 
-fileprivate class WrappedObservableList<T>: ObservableList<T> {
+private class WrappedObservableList<T>: ObservableList<T> {
     private let wrappedUpdates: Observable<Update<T>>
     
     init(_ updates: Observable<Update<T>>) {
@@ -16,18 +16,16 @@ fileprivate class WrappedObservableList<T>: ObservableList<T> {
     }
     
     override var updates: Observable<Update<T>> {
-        get {
-            return wrappedUpdates
-        }
+        return wrappedUpdates
     }
 }
 
 public extension ObservableList {
     public func subscribeOn(_ scheduler: ImmediateSchedulerType) -> ObservableList<T> {
-        return WrappedObservableList(self.updates.subscribeOn(scheduler))
+        return WrappedObservableList(updates.subscribeOn(scheduler))
     }
     
     public func observeOn(_ scheduler: ImmediateSchedulerType) -> ObservableList<T> {
-        return WrappedObservableList(self.updates.observeOn(scheduler))
+        return WrappedObservableList(updates.observeOn(scheduler))
     }
 }
