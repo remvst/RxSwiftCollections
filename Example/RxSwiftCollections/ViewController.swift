@@ -20,15 +20,15 @@ extension Array {
 
 class ViewController: UIViewController {
 
-    @IBOutlet weak var collectionView: UICollectionView!
+    @IBOutlet weak var tableView: UITableView!
     fileprivate let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let cellNib = UINib(nibName: "DemoCollectionViewCell", bundle: nil)
+        let cellNib = UINib(nibName: "DemoTableViewCell", bundle: nil)
         
-        collectionView.register(cellNib, forCellWithReuseIdentifier: "Demo")
+        tableView.register(cellNib, forCellReuseIdentifier: "Demo")
         
         self.setup()
     }
@@ -75,7 +75,7 @@ extension ViewController {
         ObservableList<Int>
             .diff(randomIntStream)
             .map { "\($0)" }
-            .bind(to: self.collectionView, reusing: "Demo", with: { (cell, text) -> DemoCollectionViewCell in
+            .bind(to: self.tableView, reusing: "Demo", with: { (cell, text) -> DemoTableViewCell in
                 cell.titleLabel.text = text
                 
                 return cell

@@ -16,6 +16,8 @@
 		607FACEC1AFB9204008FA782 /* Tests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607FACEB1AFB9204008FA782 /* Tests.swift */; };
 		7857D9B420B0761B006AD26C /* DemoCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7857D9B220B0761B006AD26C /* DemoCollectionViewCell.swift */; };
 		7857D9B520B0761B006AD26C /* DemoCollectionViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 7857D9B320B0761B006AD26C /* DemoCollectionViewCell.xib */; };
+		78DF107220EFC8CE0004F68B /* DemoTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF107020EFC8CE0004F68B /* DemoTableViewCell.swift */; };
+		78DF107320EFC8CE0004F68B /* DemoTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 78DF107120EFC8CE0004F68B /* DemoTableViewCell.xib */; };
 		7E54DC36A3EF6F14614EB48C /* Pods_RxSwiftCollections_Tests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B3091977DF559FA58907B7 /* Pods_RxSwiftCollections_Tests.framework */; };
 /* End PBXBuildFile section */
 
@@ -44,6 +46,8 @@
 		67B3091977DF559FA58907B7 /* Pods_RxSwiftCollections_Tests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_RxSwiftCollections_Tests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7857D9B220B0761B006AD26C /* DemoCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoCollectionViewCell.swift; sourceTree = "<group>"; };
 		7857D9B320B0761B006AD26C /* DemoCollectionViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoCollectionViewCell.xib; sourceTree = "<group>"; };
+		78DF107020EFC8CE0004F68B /* DemoTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DemoTableViewCell.swift; sourceTree = "<group>"; };
+		78DF107120EFC8CE0004F68B /* DemoTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = DemoTableViewCell.xib; sourceTree = "<group>"; };
 		A6894E7B9201CB67EA8957BF /* LICENSE */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; name = LICENSE; path = ../LICENSE; sourceTree = "<group>"; };
 		AC83161C38907AFEDA82D94B /* Pods-RxSwiftCollections_Example.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwiftCollections_Example.debug.xcconfig"; path = "Pods/Target Support Files/Pods-RxSwiftCollections_Example/Pods-RxSwiftCollections_Example.debug.xcconfig"; sourceTree = "<group>"; };
 		BCBBE845FC8A39A1C3B9CE81 /* Pods-RxSwiftCollections_Example.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-RxSwiftCollections_Example.release.xcconfig"; path = "Pods/Target Support Files/Pods-RxSwiftCollections_Example/Pods-RxSwiftCollections_Example.release.xcconfig"; sourceTree = "<group>"; };
@@ -110,6 +114,8 @@
 			children = (
 				7857D9B220B0761B006AD26C /* DemoCollectionViewCell.swift */,
 				7857D9B320B0761B006AD26C /* DemoCollectionViewCell.xib */,
+				78DF107020EFC8CE0004F68B /* DemoTableViewCell.swift */,
+				78DF107120EFC8CE0004F68B /* DemoTableViewCell.xib */,
 				607FACD51AFB9204008FA782 /* AppDelegate.swift */,
 				607FACD71AFB9204008FA782 /* ViewController.swift */,
 				607FACD91AFB9204008FA782 /* Main.storyboard */,
@@ -256,6 +262,7 @@
 				607FACDB1AFB9204008FA782 /* Main.storyboard in Resources */,
 				607FACE01AFB9204008FA782 /* LaunchScreen.xib in Resources */,
 				607FACDD1AFB9204008FA782 /* Images.xcassets in Resources */,
+				78DF107320EFC8CE0004F68B /* DemoTableViewCell.xib in Resources */,
 				7857D9B520B0761B006AD26C /* DemoCollectionViewCell.xib in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -379,6 +386,7 @@
 			files = (
 				607FACD81AFB9204008FA782 /* ViewController.swift in Sources */,
 				7857D9B420B0761B006AD26C /* DemoCollectionViewCell.swift in Sources */,
+				78DF107220EFC8CE0004F68B /* DemoTableViewCell.swift in Sources */,
 				607FACD61AFB9204008FA782 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
