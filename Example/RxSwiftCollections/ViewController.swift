@@ -75,10 +75,16 @@ extension ViewController {
         ObservableList<Int>
             .diff(randomIntStream)
             .map { "\($0)" }
-            .bind(to: self.tableView, reusing: "Demo", with: { (cell, text) -> DemoTableViewCell in
-                cell.titleLabel.text = text
-                
-                return cell
+            .bind(to: self.tableView,
+                  reusing: "Demo",
+                  with: { (cell, text) -> DemoTableViewCell in
+                    cell.titleLabel.text = text
+                    
+                    return cell
+            }, onSelected: { text in
+                print("selected: \(text)")
+            }, onUpdatesCompleted: { (_) in
+                print("updates completed")
             })
             .disposed(by: disposeBag)
     }
