@@ -11,7 +11,7 @@ private class ObservableListTableViewDataSource<T>: NSObject, UITableViewDelegat
     
     typealias SelectedHandlerClosure = (UITableView, IndexPath, T) -> Void
     typealias RowCreatorClosure = (UITableView, IndexPath, T) -> UITableViewCell
-    typealias UpdatesCompletionClosure = (UITableView) -> Void
+    typealias UpdatesCompletionClosure = (UITableView, [Change]) -> Void
     
     private var currentList: LazyCollection<[T]>?
     private let observableList: Observable<Update<T>>
@@ -76,7 +76,7 @@ private class ObservableListTableViewDataSource<T>: NSObject, UITableViewDelegat
                     
                     return Completable.empty()
                         .do(onCompleted: {
-                            this.updatesCompletionHandler(tableView)
+                            this.updatesCompletionHandler(tableView, update.changes)
                         })
                         .subscribeOn(MainScheduler.instance)
                 }
@@ -103,7 +103,7 @@ private class ObservableListTableViewDataSource<T>: NSObject, UITableViewDelegat
                 tableView.endUpdates()
                 return Completable.empty()
                     .do(onCompleted: {
-                        this.updatesCompletionHandler(tableView)
+                        this.updatesCompletionHandler(tableView, update.changes)
                     })
                     .subscribeOn(MainScheduler.instance)
             })
@@ -138,7 +138,7 @@ public extension Observable {
          reusing reuseIdentifier: String,
          with adapter: @escaping ((RowType, T) -> RowType),
          onSelected selected: @escaping (T) -> Void,
-         onUpdatesCompleted updatesCompleted: @escaping (UITableView) -> Void) -> Disposable where E == [T] {
+         onUpdatesCompleted updatesCompleted: @escaping (UITableView, [Change]) -> Void) -> Disposable where E == [T] {
         
         return ObservableList<T>.diff(self)
             .bind(to: tableView,
@@ -156,7 +156,7 @@ public extension ObservableList {
          reusing reuseIdentifier: String,
          with adapter: @escaping ((RowType, T) -> RowType),
          onSelected selected: @escaping (T) -> Void,
-         onUpdatesCompleted updatesCompleted: @escaping (UITableView) -> Void) -> Disposable {
+         onUpdatesCompleted updatesCompleted: @escaping (UITableView, [Change]) -> Void) -> Disposable {
         
         return bind(to: tableView,
                     reusing: reuseIdentifier,
@@ -170,7 +170,7 @@ public extension ObservableList {
          reusing reuseIdentifier: String,
          with adapter: @escaping ((RowType, IndexPath, T) -> RowType),
          onSelected selected: @escaping (T) -> Void,
-         onUpdatesCompleted updatesCompleted: @escaping (UITableView) -> Void) -> Disposable {
+         onUpdatesCompleted updatesCompleted: @escaping (UITableView, [Change]) -> Void) -> Disposable {
         
         return bind(to: tableView,
                     with: { tableView, indexPath, value -> RowType in
@@ -191,7 +191,7 @@ public extension ObservableList {
         (to tableView: UITableView,
          with adapter: @escaping ((UITableView, IndexPath, T) -> RowType),
          onSelected selected: @escaping (UITableView, IndexPath, T) -> Void,
-         onUpdatesCompleted updatesCompleted: @escaping (UITableView) -> Void) -> Disposable {
+         onUpdatesCompleted updatesCompleted: @escaping (UITableView, [Change]) -> Void) -> Disposable {
         
         let dataSource = ObservableListTableViewDataSource(list: self.updates,
                                                            rowCreator: adapter,

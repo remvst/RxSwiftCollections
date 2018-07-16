@@ -83,7 +83,7 @@ extension ViewController {
                     return cell
             }, onSelected: { text in
                 print("selected: \(text)")
-            }, onUpdatesCompleted: { (_) in
+            }, onUpdatesCompleted: { (_, _) in
                 print("updates completed")
             })
             .disposed(by: disposeBag)
