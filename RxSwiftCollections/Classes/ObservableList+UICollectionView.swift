@@ -81,21 +81,6 @@ private class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource 
     }
 }
 
-private class AssociatedObjectDisposable: Disposable {
-    var retained: AnyObject!
-    let disposable: Disposable
-    
-    init (retaining retained: AnyObject, disposing disposable: Disposable) {
-        self.retained = retained
-        self.disposable = disposable
-    }
-    
-    func dispose() {
-        retained = nil
-        disposable.dispose()
-    }
-}
-
 // swiftlint:disable line_length
 
 public extension Observable {

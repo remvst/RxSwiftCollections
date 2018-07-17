@@ -9,6 +9,7 @@
 import UIKit
 import RxSwift
 import RxSwiftCollections
+import IGListKit
 
 extension Array {
     mutating func shuffle() {
@@ -18,43 +19,37 @@ extension Array {
     }
 }
 
-class ViewController: UIViewController {
-
-    @IBOutlet weak var tableView: UITableView!
-    fileprivate let disposeBag = DisposeBag()
+final class ViewController: UIViewController {
+    var adapter: ListAdapter?
+    
+    @IBOutlet weak var collectionView: UICollectionView?
+    let disposeBag = DisposeBag()
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        let cellNib = UINib(nibName: "DemoTableViewCell", bundle: nil)
+        guard let collectionView = collectionView else {
+            return
+        }
         
-        tableView.register(cellNib, forCellReuseIdentifier: "Demo")
+        view.addSubview(collectionView)
         
-        self.setup()
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-    }
-}
-
-func randomInt(_ upperBound: Int) -> Int {
-    return Int(arc4random_uniform(UInt32(upperBound)))
-}
-
-extension ViewController {
+        let cellNib = UINib(nibName: "DemoCollectionViewCell", bundle: nil)
+        
+        collectionView.register(cellNib, forCellWithReuseIdentifier: "Demo")
     
-    func setup() {
-        let removeCount = 100
-        let upperBound = 1000
-        let original = Array([Int](1...upperBound))
-        let randomIntStream = Observable<Int>
+        let original = Array([
+            "A", "B", "C", "D", "E", "F", "G", "H",
+            "I", "J", "K", "L", "M", "N", "O", "P",
+            "Q", "R", "S", "T", "U", "V", "W", "X",
+            "Y", "Z"])
+        let randomCharacterStream = Observable<Int>
             .interval(2.0, scheduler: ConcurrentDispatchQueueScheduler(qos: .background))
-            .scan(original, accumulator: { (previous, _) -> [Int] in
+            .scan(original, accumulator: { (previous, _) -> [String] in
                 var next = Array(previous)
                 
                 // remove some numbers
-                for _ in 0...randomInt(removeCount) {
+                for _ in 0...randomInt(2) {
                     next.remove(at: randomInt(next.count))
                 }
                 
@@ -62,7 +57,7 @@ extension ViewController {
                 let additions = original.filter({ (number) -> Bool in !previous.contains(number) })
                 
                 if !additions.isEmpty {
-                    for i in 0...randomInt(additions.count) {
+                    for i in 0..<additions.count {
                         let position = randomInt(next.count)
                         next.insert(additions[i], at: position)
                     }
@@ -71,21 +66,25 @@ extension ViewController {
                 return next
             })
             .asObservable()
-            
-        ObservableList<Int>
-            .diff(randomIntStream)
-            .map { "\($0)" }
-            .bind(to: self.tableView,
-                  reusing: "Demo",
-                  with: { (cell, text) -> DemoTableViewCell in
-                    cell.titleLabel.text = text
-                    
-                    return cell
-            }, onSelected: { text in
-                print("selected: \(text)")
-            }, onUpdatesCompleted: { (_) in
-                print("updates completed")
-            })
+        
+        let listAdapter = ListAdapter(updater: ListAdapterUpdater(), viewController: nil)
+        
+        adapter = listAdapter
+        ObservableList<String>
+            .diff(randomCharacterStream)
+            .bind(to: listAdapter, withNibName: "DemoCollectionViewCell") { cell, text -> DemoCollectionViewCell in
+                cell.titleLabel.text = text
+                
+                print(text)
+                
+                return cell
+            }
             .disposed(by: disposeBag)
+        
+        adapter?.collectionView = collectionView
     }
+}
+
+func randomInt(_ upperBound: Int) -> Int {
+    return Int(arc4random_uniform(UInt32(upperBound)))
 }

@@ -1,5 +1,10 @@
 PODS:
   - DeepDiff (1.2.0)
+  - IGListKit (3.4.0):
+    - IGListKit/Default (= 3.4.0)
+  - IGListKit/Default (3.4.0):
+    - IGListKit/Diffing
+  - IGListKit/Diffing (3.4.0)
   - Nimble (7.0.3)
   - Quick (1.2.0)
   - RxBlocking (4.1.2):
@@ -9,6 +14,7 @@ PODS:
   - RxSwift (4.1.2)
   - RxSwiftCollections (0.1.0):
     - DeepDiff (~> 1.2)
+    - IGListKit (~> 3.4.0)
     - RxCocoa (~> 4.0)
     - RxSwift (~> 4.0)
   - RxTest (4.1.2):
@@ -16,6 +22,7 @@ PODS:
 
 DEPENDENCIES:
   - DeepDiff (~> 1.2)
+  - IGListKit (~> 3.4)
   - Nimble (~> 7.0.2)
   - Quick (~> 1.2.0)
   - RxBlocking (~> 4.0)
@@ -27,6 +34,7 @@ DEPENDENCIES:
 SPEC REPOS:
   https://github.com/cocoapods/specs.git:
     - DeepDiff
+    - IGListKit
     - Nimble
     - Quick
     - RxBlocking
@@ -40,14 +48,15 @@ EXTERNAL SOURCES:
 
 SPEC CHECKSUMS:
   DeepDiff: 0ee83ac6942d441f677c22e981548c6e0937f2b6
+  IGListKit: 7a5d788e9fb746bcd402baa8e8b24bc3bd2a5a07
   Nimble: 7f5a9c447a33002645a071bddafbfb24ea70e0ac
   Quick: 58d203b1c5e27fff7229c4c1ae445ad7069a7a08
   RxBlocking: f6054985901412fc8c02daa84e92d4ba68c61389
   RxCocoa: d88ba0f1f6abf040011a9eb4b539324fc426843a
   RxSwift: e49536837d9901277638493ea537394d4b55f570
-  RxSwiftCollections: 124f394e6eaa435f5072e29de2b3937ae2e0422c
+  RxSwiftCollections: f61bba6df9e2cddb61e548de40eb626617625396
   RxTest: e634f15fd2c2cd0e0120132ef7a4f7be69ad0393
 
-PODFILE CHECKSUM: 06d50920f3d22276d8bc820949f6bc0907b6ad78
+PODFILE CHECKSUM: c74a5ed667c74e2ee643222e4468d3597efdaadc
 
 COCOAPODS: 1.5.2

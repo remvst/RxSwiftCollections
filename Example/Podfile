@@ -9,6 +9,7 @@ target 'RxSwiftCollections_Example' do
   pod 'RxSwift',    '~> 4.0'
   pod 'RxCocoa',    '~> 4.0'
   pod 'DeepDiff',   '~> 1.2'
+  pod 'IGListKit',  '~> 3.4'
 
   target 'RxSwiftCollections_Tests' do
     inherit! :search_paths

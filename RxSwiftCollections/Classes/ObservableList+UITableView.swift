@@ -115,7 +115,7 @@ private class ObservableListTableViewDataSource<T>: NSObject, UITableViewDelegat
     }
 }
 
-private class AssociatedObjectDisposable: Disposable {
+internal class AssociatedObjectDisposable: Disposable {
     var retained: AnyObject!
     let disposable: Disposable
     
