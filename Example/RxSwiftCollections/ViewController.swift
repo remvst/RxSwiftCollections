@@ -69,19 +69,23 @@ final class ViewController: UIViewController {
         
         let listAdapter = ListAdapter(updater: ListAdapterUpdater(), viewController: nil)
         
-        adapter = listAdapter
         ObservableList<String>
             .diff(randomCharacterStream)
-            .bind(to: listAdapter, withNibName: "DemoCollectionViewCell") { cell, text -> DemoCollectionViewCell in
+            .bind(to: listAdapter,
+                  nibName: "DemoCollectionViewCell",
+                  sizeAdapter: { (containerSize, _) -> CGSize in
+                    return CGSize(width: containerSize.width,
+                                  height: 55.0)
+            }, cellAdapter: { cell, text -> DemoCollectionViewCell in
                 cell.titleLabel.text = text
                 
                 print(text)
                 
                 return cell
-            }
+            })
             .disposed(by: disposeBag)
         
-        adapter?.collectionView = collectionView
+        listAdapter.collectionView = collectionView
     }
 }
 

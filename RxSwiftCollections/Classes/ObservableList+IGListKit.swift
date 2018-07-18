@@ -173,6 +173,10 @@ public class BindingListSectionController<T>: ListSectionController {
         fatalError("Not implemented")
     }
     
+    func didSelectValue(at index: Int, with value: T) {
+        
+    }
+    
     final public override func sizeForItem(at index: Int) -> CGSize {
         return sizeForItem(at: index, with: model!.value)
     }
@@ -186,46 +190,130 @@ public class BindingListSectionController<T>: ListSectionController {
         model = object as! WrappedSnowflake<T>
         // swiftlint:enable force_cast
     }
+    
+    public override func didSelectItem(at index: Int) {
+        didSelectValue(at: index, with: model!.value)
+    }
 }
 
 private class SimpleListSectionController<T, CellType: UICollectionViewCell>: BindingListSectionController<T> {
-    private let adapter: ((CellType, Int, T) -> CellType)
-    private let nibName: String
     
-    init(with adapter: @escaping ((CellType, Int, T) -> CellType), withNibName nibName: String) {
-        self.adapter = adapter
+    private let sizeAdapter: ((CGSize, T) -> CGSize)
+    private let cellAdapter: ((CellType, Int, T) -> CellType)
+    private let valueSelected: ((T) -> Void)
+    
+    private var nibName: String?
+    private var reuseIdentifier: String?
+    
+    init(sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         cellAdapter: @escaping ((CellType, Int, T) -> CellType),
+         valueSelected: @escaping ((T) -> Void),
+         nibName: String? = nil,
+         reuseIdentifier: String? = nil) {
+        
+        self.sizeAdapter = sizeAdapter
+        self.cellAdapter = cellAdapter
+        self.valueSelected = valueSelected
+        
         self.nibName = nibName
+        self.reuseIdentifier = reuseIdentifier
+        
     }
     
     override func cellForItem(at index: Int, with value: T) -> UICollectionViewCell {
-        guard let cell = collectionContext?.dequeueReusableCell(withNibName: nibName,
-                                                                bundle: nil,
-                                                                for: self,
-                                                                at: index) as? CellType else {
-                                                                    fatalError("Can't create cell")
+        
+        var cell: CellType?
+        
+        if let nibName = nibName {
+            cell = collectionContext?.dequeueReusableCell(withNibName: nibName,
+                                                          bundle: nil,
+                                                          for: self,
+                                                          at: index) as? CellType
+        } else if let reuseIdentifier = reuseIdentifier {
+            cell = collectionContext?.dequeueReusableCell(of: CellType.self,
+                                                          withReuseIdentifier: reuseIdentifier,
+                                                          for: self,
+                                                          at: index) as? CellType
+        }
+        
+        guard let unwrappedCell = cell else {
+            fatalError("Couldn't create cell")
         }
         
         // swiftlint:disable force_cast
-        return adapter(cell, index, value as! T)
+        return cellAdapter(unwrappedCell, index, value as! T)
         // swiftlint:enable force_cast
+    }
+    
+    override func sizeForItem(at index: Int, with value: T) -> CGSize {
+        return sizeAdapter(collectionContext!.containerSize, value)
+    }
+    
+    override func didSelectValue(at index: Int, with value: T) {
+        return valueSelected(value)
     }
 }
 
 public extension ObservableList {
-    func bind<CellType: UICollectionViewCell>(to listAdapter: ListAdapter,
-                                              withNibName nibName: String,
-                                              with adapter: @escaping ((CellType, T) -> CellType)) -> Disposable {
+    
+    func bind<CellType: UICollectionViewCell>
+        (to listAdapter: ListAdapter,
+         reuseIdentifier: String,
+         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         cellAdapter: @escaping ((CellType, T) -> CellType),
+         valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
+        
         return bind(to: listAdapter,
-                    withNibName: nibName,
-                    with: { cell, _, value -> CellType in return adapter(cell, value) })
+                    reuseIdentifier: reuseIdentifier,
+                    sizeAdapter: sizeAdapter,
+                    cellAdapter: { cellAdapter($0, $2) },
+                    valueSelected: valueSelected)
+        
     }
     
-    func bind<CellType: UICollectionViewCell>(to listAdapter: ListAdapter,
-                                              withNibName nibName: String,
-                                              with adapter: @escaping ((CellType, Int, T) -> CellType)) -> Disposable {
+    private func bind<CellType: UICollectionViewCell>
+        (to listAdapter: ListAdapter,
+         reuseIdentifier: String,
+         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         cellAdapter: @escaping ((CellType, Int, T) -> CellType),
+         valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
+        
         return bind(to: listAdapter,
                     with: { _, _ -> BindingListSectionController<T> in
-                        return SimpleListSectionController<T, CellType>(with: adapter, withNibName: nibName)
+                        return SimpleListSectionController<T, CellType>(sizeAdapter: sizeAdapter,
+                                                                        cellAdapter: cellAdapter,
+                                                                        valueSelected: valueSelected,
+                                                                        reuseIdentifier: reuseIdentifier)
+        })
+    }
+    
+    func bind<CellType: UICollectionViewCell>
+        (to listAdapter: ListAdapter,
+         nibName: String,
+         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         cellAdapter: @escaping ((CellType, T) -> CellType),
+         valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
+        
+        return bind(to: listAdapter,
+                    nibName: nibName,
+                    sizeAdapter: sizeAdapter,
+                    cellAdapter: { cellAdapter($0, $2) },
+                    valueSelected: valueSelected)
+    }
+    
+    private func bind<CellType: UICollectionViewCell>
+        (to listAdapter: ListAdapter,
+         nibName: String,
+         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         cellAdapter: @escaping ((CellType, Int, T) -> CellType),
+         valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
+        
+        return bind(to: listAdapter,
+                    with: { _, _ -> BindingListSectionController<T> in
+                        return SimpleListSectionController<T, CellType>(sizeAdapter: sizeAdapter,
+                                                                        cellAdapter: cellAdapter,
+                                                                        valueSelected: valueSelected,
+                                                                        nibName: nibName)
         })
     }
     
