@@ -231,6 +231,7 @@
 		77E5EEC2A31CF8EA4C6AAA8B10DB8837 /* MoveReducer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 15C9C5E67BFB728823EF794BB5F0A2A2 /* MoveReducer.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		77F9D139DD145123BCC4F352467A3727 /* ConcurrentDispatchQueueScheduler.swift in Sources */ = {isa = PBXBuildFile; fileRef = CC01CE9706B380933D5275641C9BB60E /* ConcurrentDispatchQueueScheduler.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		784F1D52B354D4F79047682341154026 /* RxSwiftCollections-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = E37E7A66D9E66C0FDE2394CE4C6FA611 /* RxSwiftCollections-dummy.m */; };
+		789E5A9E21251E660065812D /* IndexedObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = 789E5A9D21251E650065812D /* IndexedObservableList.swift */; };
 		78DF106F20EFC5DD0004F68B /* ObservableList+UITableView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 78DF106E20EFC5DD0004F68B /* ObservableList+UITableView.swift */; };
 		78F4295FF6D9DAD954BDF3D96B69B199 /* ControlTarget.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8FADC763B8C568E3CA04E7DF27637E3B /* ControlTarget.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		78FFC86662B21DA0E00F52A706605993 /* RxCocoa-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 6811BA3DC6579F1B522376F57280C132 /* RxCocoa-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -829,6 +830,7 @@
 		780CA9C9AE420CBD9981ABB7ADEE98D8 /* Bag.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Bag.swift; path = Platform/DataStructures/Bag.swift; sourceTree = "<group>"; };
 		783CD40B443E30F56881B34397BF73D3 /* RxBlocking-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RxBlocking-prefix.pch"; sourceTree = "<group>"; };
 		786FB914B20E819CD1D904B33F6C58B3 /* QuickSelectedTestSuiteBuilder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = QuickSelectedTestSuiteBuilder.swift; path = Sources/Quick/QuickSelectedTestSuiteBuilder.swift; sourceTree = "<group>"; };
+		789E5A9D21251E650065812D /* IndexedObservableList.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = IndexedObservableList.swift; path = RxSwiftCollections/Classes/IndexedObservableList.swift; sourceTree = "<group>"; };
 		78DF106E20EFC5DD0004F68B /* ObservableList+UITableView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = "ObservableList+UITableView.swift"; path = "RxSwiftCollections/Classes/ObservableList+UITableView.swift"; sourceTree = "<group>"; };
 		78E240C7C966856D3B93C1E983209B88 /* InfiniteSequence.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = InfiniteSequence.swift; path = Platform/DataStructures/InfiniteSequence.swift; sourceTree = "<group>"; };
 		798973A26D45D92B5C7D84CCAD12329B /* Quick.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.module; path = Quick.modulemap; sourceTree = "<group>"; };
@@ -1329,6 +1331,7 @@
 		60D10F68EFE039A29B7BA71D93E49885 /* RxSwiftCollections */ = {
 			isa = PBXGroup;
 			children = (
+				789E5A9D21251E650065812D /* IndexedObservableList.swift */,
 				0646A6C3FECE7C461AC3D386445A466B /* DifferentialObservableList.swift */,
 				EB6719BD496262C0B33A6AC851016AA6 /* MappedObservableList.swift */,
 				5A862EA88BA8B5FF6C000E0933BFC699 /* ObservableList.swift */,
@@ -2468,6 +2471,7 @@
 			files = (
 				1AC8213D8FFBFC57107F15EF0F800964 /* DifferentialObservableList.swift in Sources */,
 				637B4FC5860220BB8576977E7531B5F6 /* MappedObservableList.swift in Sources */,
+				789E5A9E21251E660065812D /* IndexedObservableList.swift in Sources */,
 				523881D763F866CD91FA325EA33579A8 /* ObservableList.swift in Sources */,
 				85471BDC8ED7CB879E90937B8E89B358 /* ObservableList+UICollectionView.swift in Sources */,
 				BD83A2F6AA8BB03A53C254D653941FB8 /* ReplaySubjectMap.swift in Sources */,
