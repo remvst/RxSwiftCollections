@@ -9,56 +9,79 @@ import Foundation
 import RxSwift
 
 class Index<T> {
-    let value: Int
+    var value: Int
     private weak var internalPrevious: PublishSubject<T?>?
     private weak var internalNext: PublishSubject<T?>?
     
     public var previous: PublishSubject<T?> {
-        get {
-            let previous = internalPrevious ?? PublishSubject<T?>()
-            
-            internalPrevious = previous
-            
-            return previous
-        }
+        let previous = internalPrevious ?? PublishSubject<T?>()
+        
+        internalPrevious = previous
+        
+        return previous
     }
     
     public var next: PublishSubject<T?> {
-        get {
-            let next = internalNext ?? PublishSubject<T?>()
-            
-            internalNext = next
-            
-            return next
-        }
+        let next = internalNext ?? PublishSubject<T?>()
+        
+        internalNext = next
+        
+        return next
     }
     
     init(value: Int) {
         self.value = value
     }
-}
-
-class Indices<T>: NSObject {
-    private var indices: [Index<T>]
     
-    override init() {
-        self.indices = []
-    }
-    
-    func get(_ index: Int) -> Index<T> {
-        return Index<T>(value: index)
+    func postUpdate(_ processor: (PublishSubject<T?>?, PublishSubject<T?>?) -> Void) {
+        let previous = internalPrevious
+        let next = internalNext
+        
+        processor(previous, next)
     }
 }
 
 class UpdateHolder<T>: NSObject {
-    let indices: Indices<T>
+    var indices: [Index<T>]
     let update: Update<T>?
     
-    override convenience init() {
-        self.init(indices: Indices<T>(), update: nil)
+    func get(_ index: Int, create: Bool = true) -> Index<T>? {
+        guard let existingIndex = indices.first(where: { lookupIndex in
+            lookupIndex.value == index
+        }) else {
+            if create {
+                let index = Index<T>(value: index)
+                
+                indices.append(index)
+                
+                return index
+            } else {
+                return nil
+            }
+        }
+        
+        return existingIndex
     }
     
-    init(indices: Indices<T>, update: Update<T>?) {
+    func adjustIndices(start: Int, end: Int, adjustment: Int) {
+        for i in start ... end {
+            guard let existingIndex = get(i, create: false) else {
+                continue
+            }
+            
+            existingIndex.value += adjustment
+        }
+    }
+    
+    func reset() {
+        indices.removeAll()
+    }
+    
+    override convenience init() {
+        self.init(indices: [], update: nil)
+    }
+    
+    init(indices: [Index<T>], update: Update<T>?) {
         self.indices = indices
         self.update = update
         
@@ -80,17 +103,65 @@ private class IndexedObservableList<T, U>: ObservableList<U> {
         
         return list.updates
             .scan(UpdateHolder<T>()) { (holder, update) -> UpdateHolder<T> in
+                let listSize = update.list.count
+                
+                update.changes.forEach { change in
+                    
+                    switch change {
+                    case .insert(let index):
+                        holder.adjustIndices(start: index, end: listSize - 1, adjustment: 1)
+                    case .delete(let index):
+                        holder.adjustIndices(start: index, end: listSize, adjustment: -1)
+                    case .move(let from, let to):
+                        if to < from {
+                            holder.adjustIndices(start: to, end: from, adjustment: 1)
+                        } else {
+                            holder.adjustIndices(start: from + 1, end: to, adjustment: -1)
+                        }
+                    case .reload:
+                        holder.reset()
+                    }
+                }
+                
+                holder.indices.forEach { index in
+                    index.postUpdate { (previous, next) in
+                        let centerIndex = index.value
+                        
+                        if previous != nil {
+                            if centerIndex == 0 {
+                                previous?.onNext(nil)
+                            } else {
+                                previous?.onNext(update.list[centerIndex - 1])
+                            }
+                        }
+                        
+                        if next != nil {
+                            if centerIndex == listSize - 1 {
+                                next?.onNext(nil)
+                            } else {
+                                next?.onNext(update.list[centerIndex + 1])
+                            }
+                        }
+                    }
+                }
+                
                 return UpdateHolder(indices: holder.indices, update: update)
             }
             .map { holder in
-                let placeholderList = 0..<holder.update!.list.count
+                guard let update = holder.update else {
+                    preconditionFailure("Update must always be present")
+                }
+                
+                let placeholderList = 0..<update.list.count
                 
                 return Update(list: placeholderList.lazy.map({ index in
-                    let value = holder.update!.list[index]
-                    let indexWrapper = holder.indices.get(index)
+                    let value = update.list[index]
+                    guard let indexWrapper = holder.get(index) else {
+                        preconditionFailure("Index must always be created")
+                    }
                     
                     return transform(value, indexWrapper.previous, indexWrapper.next)
-                }), changes: holder.update!.changes)
+                }), changes: update.changes)
             }
     }
 }
