@@ -10,34 +10,61 @@ import RxSwift
 
 class Index<T> {
     var value: Int
-    private weak var internalPrevious: PublishSubject<T?>?
-    private weak var internalNext: PublishSubject<T?>?
+    var list: LazyCollection<[T]>
+    private weak var internalPrevious: BehaviorSubject<Int>?
+    private weak var internalNext: BehaviorSubject<Int>?
     
-    public var previous: PublishSubject<T?> {
-        let previous = internalPrevious ?? PublishSubject<T?>()
+    public var previous: Observable<T?> {
+        let previous = internalPrevious ?? BehaviorSubject<Int>(value: value - 1)
         
         internalPrevious = previous
         
-        return previous
+        return previous.map { [previous] previousIndex -> T? in
+            guard previousIndex >= 0 else {
+                return nil
+            }
+            
+            return self.list[previousIndex]
+        }
     }
     
-    public var next: PublishSubject<T?> {
-        let next = internalNext ?? PublishSubject<T?>()
+    public var next: Observable<T?> {
+        let next = internalNext ?? BehaviorSubject<Int>(value: value + 1)
         
         internalNext = next
         
-        return next
+        return next.map { [next] nextIndex -> T? in
+            guard nextIndex < self.list.count else {
+                return nil
+            }
+            
+            return self.list[nextIndex]
+        }
     }
     
-    init(value: Int) {
+    init(value: Int, list: LazyCollection<[T]>) {
         self.value = value
+        self.list = list
     }
     
-    func postUpdate(_ processor: (PublishSubject<T?>?, PublishSubject<T?>?) -> Void) {
+    func postUpdate(list: LazyCollection<[T]>) {
+        self.list = list
+        
         let previous = internalPrevious
         let next = internalNext
+        let centerIndex = value
         
-        processor(previous, next)
+        if previous != nil {
+            previous?.onNext(centerIndex - 1)
+        } else {
+            preconditionFailure(String(format: "wtfprevious %d", centerIndex))
+        }
+        
+        if next != nil {
+            next?.onNext(centerIndex + 1)
+        } else {
+            preconditionFailure(String(format: "wtfnext %d", centerIndex))
+        }
     }
 }
 
@@ -50,7 +77,11 @@ class UpdateHolder<T>: NSObject {
             lookupIndex.value == index
         }) else {
             if create {
-                let index = Index<T>(value: index)
+                guard let update = update else {
+                    preconditionFailure("Attempt to create index with no update")
+                }
+                
+                let index = Index<T>(value: index, list: update.list)
                 
                 indices.append(index)
                 
@@ -64,13 +95,17 @@ class UpdateHolder<T>: NSObject {
     }
     
     func adjustIndices(start: Int, end: Int, adjustment: Int) {
-        for i in start ... end {
-            guard let existingIndex = get(i, create: false) else {
-                continue
+        (start...end)
+            .map { offset -> Index<T>? in
+                guard let existingIndex = get(offset, create: false) else {
+                    return nil
+                }
+                
+                return existingIndex
             }
-            
-            existingIndex.value += adjustment
-        }
+            .forEach { index in
+                index?.value += adjustment
+            }
     }
     
     func reset() {
@@ -106,7 +141,6 @@ private class IndexedObservableList<T, U>: ObservableList<U> {
                 let listSize = update.list.count
                 
                 update.changes.forEach { change in
-                    
                     switch change {
                     case .insert(let index):
                         holder.adjustIndices(start: index, end: listSize - 1, adjustment: 1)
@@ -124,25 +158,7 @@ private class IndexedObservableList<T, U>: ObservableList<U> {
                 }
                 
                 holder.indices.forEach { index in
-                    index.postUpdate { (previous, next) in
-                        let centerIndex = index.value
-                        
-                        if previous != nil {
-                            if centerIndex == 0 {
-                                previous?.onNext(nil)
-                            } else {
-                                previous?.onNext(update.list[centerIndex - 1])
-                            }
-                        }
-                        
-                        if next != nil {
-                            if centerIndex == listSize - 1 {
-                                next?.onNext(nil)
-                            } else {
-                                next?.onNext(update.list[centerIndex + 1])
-                            }
-                        }
-                    }
+                    index.postUpdate(list: update.list)
                 }
                 
                 return UpdateHolder(indices: holder.indices, update: update)
@@ -152,10 +168,11 @@ private class IndexedObservableList<T, U>: ObservableList<U> {
                     preconditionFailure("Update must always be present")
                 }
                 
-                let placeholderList = 0..<update.list.count
+                let placeholderList = 0 ..< update.list.count
                 
                 return Update(list: placeholderList.lazy.map({ index in
                     let value = update.list[index]
+                    
                     guard let indexWrapper = holder.get(index) else {
                         preconditionFailure("Index must always be created")
                     }
