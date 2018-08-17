@@ -117,7 +117,7 @@ class IndexedObservableListTest: QuickSpec {
                 expect(try? list[2].toBlocking().first()) == "2 < 3 > -1"
             }
             
-            it("supports growing lists") {
+            it("supports changing lists") {
                 // 101
                 inputList.append(101)
                 
@@ -154,11 +154,17 @@ class IndexedObservableListTest: QuickSpec {
                 
                 expect(item0.values.last) == "-1 < 101 > 104" // 101 @ 0
                 expect(item3.values.last) == "101 < 104 > 102" // 104 @ 1
-                
-                print(item1.values) // ==> 4
-                print(item2.values) // ==> 2
                 expect(item1.values.last) == "104 < 102 > 103" // 102 @ 2
                 expect(item2.values.last) == "102 < 103 > -1" // 103 @ 3
+                
+                // 101, 104, 103
+                inputList.remove(at: 2)
+                
+                assert(test.awaitCount(3))
+                
+                expect(item0.values.last) == "-1 < 101 > 104" // 101 @ 0
+                expect(item3.values.last) == "101 < 104 > 103" // 104 @ 1
+                expect(item2.values.last) == "104 < 103 > -1" // 103 @ 2
             }
         }
     }

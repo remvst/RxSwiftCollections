@@ -19,7 +19,7 @@ class Index<T> {
         
         internalPrevious = previous
         
-        return previous.map { [previous] previousIndex -> T? in
+        return previous.map { previousIndex -> T? in
             guard previousIndex >= 0 else {
                 return nil
             }
@@ -33,7 +33,7 @@ class Index<T> {
         
         internalNext = next
         
-        return next.map { [next] nextIndex -> T? in
+        return next.map { nextIndex -> T? in
             guard nextIndex < self.list.count else {
                 return nil
             }
