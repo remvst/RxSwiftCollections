@@ -17,6 +17,7 @@ target 'RxSwiftCollections_Example' do
     pod 'Nimble', '~> 7.0.2'
     pod 'RxBlocking', '~> 4.0'
     pod 'RxTest',     '~> 4.0'
+    pod 'RxSwiftCollections', :path => '../'
   end
   
 end
