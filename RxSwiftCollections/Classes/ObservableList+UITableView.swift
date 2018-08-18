@@ -115,23 +115,6 @@ private class ObservableListTableViewDataSource<T>: NSObject, UITableViewDelegat
     }
 }
 
-private class AssociatedObjectDisposable: Disposable {
-    var retained: AnyObject!
-    let disposable: Disposable
-    
-    init(retaining retained: AnyObject,
-         disposing disposable: Disposable) {
-        
-        self.retained = retained
-        self.disposable = disposable
-    }
-    
-    func dispose() {
-        retained = nil
-        disposable.dispose()
-    }
-}
-
 public extension Observable {
     func bind<RowType: UITableViewCell, T: Hashable>
         (to tableView: UITableView,
