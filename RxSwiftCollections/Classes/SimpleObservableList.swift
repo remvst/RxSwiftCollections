@@ -15,6 +15,8 @@ public class SimpleObservableList<T>: ObservableList<T> {
     private var currentList: [T]?
     private let subject: PublishSubject<Update<T>> = PublishSubject()
     
+    private let queue = DispatchQueue(label: "SimpleObservableListQueue")
+    
     public override init() {
     }
     
@@ -26,12 +28,18 @@ public class SimpleObservableList<T>: ObservableList<T> {
         self.currentList = values
     }
     
-    private func update(_ updater: (([T]) -> Update<T>)) {
-        let listCopy = Array(currentList ?? [])
-        let update = updater(listCopy)
-    
-        subject.onNext(update)
-        currentList = update.list.elements
+    private func update(_ updater: @escaping (([T]) -> Update<T>)) {
+        queue.async { [weak self] in
+            guard let this = self else {
+                return
+            }
+            
+            let listCopy = Array(this.currentList ?? [])
+            let update = updater(listCopy)
+            
+            this.subject.onNext(update)
+            this.currentList = update.list.elements
+        }
     }
     
     public override var updates: Observable<Update<T>> {
@@ -53,6 +61,21 @@ public extension SimpleObservableList {
             next.append(element)
             
             return Update(list: next, changes: [.insert(index: next.count - 1)])
+        }
+    }
+    
+    func appendAll(_ elements: [T]) {
+        update { previous -> Update<T> in
+            var next = Array(previous)
+            next.append(contentsOf: elements)
+            
+            var changes = [Change]()
+            
+            for i in 0 ..< elements.count {
+                changes.append(.insert(index: previous.count + i))
+            }
+            
+            return Update(list: next, changes: changes)
         }
     }
     
