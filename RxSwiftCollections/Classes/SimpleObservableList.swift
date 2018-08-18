@@ -29,7 +29,7 @@ public class SimpleObservableList<T>: ObservableList<T> {
     }
     
     private func update(_ updater: @escaping (([T]) -> Update<T>)) {
-        queue.async { [weak self] in
+        queue.sync { [weak self] in
             guard let this = self else {
                 return
             }
