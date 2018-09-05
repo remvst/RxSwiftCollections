@@ -198,14 +198,14 @@ public class BindingListSectionController<T>: ListSectionController {
 
 private class SimpleListSectionController<T, CellType: UICollectionViewCell>: BindingListSectionController<T> {
     
-    private let sizeAdapter: ((CGSize, T) -> CGSize)
+    private let sizeAdapter: ((CGSize, Int, T) -> CGSize)
     private let cellAdapter: ((CellType, Int, T) -> CellType)
     private let valueSelected: ((T) -> Void)
     
     private var nibName: String?
     private var reuseIdentifier: String?
     
-    init(sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+    init(sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
          cellAdapter: @escaping ((CellType, Int, T) -> CellType),
          valueSelected: @escaping ((T) -> Void),
          nibName: String? = nil,
@@ -246,7 +246,7 @@ private class SimpleListSectionController<T, CellType: UICollectionViewCell>: Bi
     }
     
     override func sizeForItem(at index: Int, with value: T) -> CGSize {
-        return sizeAdapter(collectionContext!.containerSize, value)
+        return sizeAdapter(collectionContext!.containerSize, index, value)
     }
     
     override func didSelectValue(at index: Int, with value: T) {
@@ -259,7 +259,7 @@ public extension ObservableList {
     func bind<CellType: UICollectionViewCell>
         (to listAdapter: ListAdapter,
          reuseIdentifier: String,
-         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
          cellAdapter: @escaping ((CellType, T) -> CellType),
          valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
         
@@ -274,7 +274,7 @@ public extension ObservableList {
     private func bind<CellType: UICollectionViewCell>
         (to listAdapter: ListAdapter,
          reuseIdentifier: String,
-         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
          cellAdapter: @escaping ((CellType, Int, T) -> CellType),
          valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
         
@@ -290,7 +290,7 @@ public extension ObservableList {
     func bind<CellType: UICollectionViewCell>
         (to listAdapter: ListAdapter,
          nibName: String,
-         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
          cellAdapter: @escaping ((CellType, T) -> CellType),
          valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
         
@@ -304,7 +304,7 @@ public extension ObservableList {
     private func bind<CellType: UICollectionViewCell>
         (to listAdapter: ListAdapter,
          nibName: String,
-         sizeAdapter: @escaping ((CGSize, T) -> CGSize),
+         sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
          cellAdapter: @escaping ((CellType, Int, T) -> CellType),
          valueSelected: @escaping ((T) -> Void) = { _ in }) -> Disposable {
         
