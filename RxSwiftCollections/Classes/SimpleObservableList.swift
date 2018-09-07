@@ -13,6 +13,7 @@ import RxSwift
 /// made, the list will emit updates to any listeners
 public class SimpleObservableList<T>: ObservableList<T> {
     private var currentList: [T]?
+//    private var updateQueue = [Update<T>]()
     private let subject: PublishSubject<Update<T>> = PublishSubject()
     
     private let queue = DispatchQueue(label: "SimpleObservableListQueue")
@@ -29,17 +30,18 @@ public class SimpleObservableList<T>: ObservableList<T> {
     }
     
     private func update(_ updater: @escaping (([T]) -> Update<T>)) {
-        queue.sync { [weak self] in
-            guard let this = self else {
-                return
-            }
-            
-            let listCopy = Array(this.currentList ?? [])
+        guard let update = queue.sync(execute: { () -> Update<T>? in
+            let listCopy = Array(self.currentList ?? [])
             let update = updater(listCopy)
             
-            this.subject.onNext(update)
-            this.currentList = update.list.elements
+            self.currentList = update.list.elements
+            
+            return update
+        }) else {
+            return
         }
+        
+        self.subject.onNext(update)
     }
     
     public override var updates: Observable<Update<T>> {
