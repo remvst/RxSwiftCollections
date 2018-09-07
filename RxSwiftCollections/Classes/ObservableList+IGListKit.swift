@@ -91,7 +91,7 @@ private class ObservableIGDataSource<T>: NSObject, ListAdapterDataSource {
                         var wrappedList: [WrappedSnowflake<T>] = []
                         
                         for i in 0..<count {
-                            let diffIndex = this.nextSequenceId + 1
+                            let diffIndex = this.nextSequenceId
                             
                             this.nextSequenceId += 1
                             
@@ -118,12 +118,13 @@ private class ObservableIGDataSource<T>: NSObject, ListAdapterDataSource {
                     })
                     
                     update.changes.forEach { change in
-                        let nextId = this.nextSequenceId
-                        
-                        this.nextSequenceId += 1
                         
                         switch change {
                         case .insert(let index):
+                            let nextId = this.nextSequenceId
+                            
+                            this.nextSequenceId += 1
+                            
                             diffableIndices.insert(nextId, at: index)
                         case .delete(let index):
                             if diffableIndices.count <= index {
@@ -271,7 +272,7 @@ public extension ObservableList {
         
     }
     
-    private func bind<CellType: UICollectionViewCell>
+    func bind<CellType: UICollectionViewCell>
         (to listAdapter: ListAdapter,
          reuseIdentifier: String,
          sizeAdapter: @escaping ((CGSize, Int, T) -> CGSize),
