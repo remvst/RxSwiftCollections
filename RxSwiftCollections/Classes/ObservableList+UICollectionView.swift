@@ -9,11 +9,11 @@ import RxSwift
 
 private class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource {
     
-    private var currentList: LazyCollection<[T]>?
-    private let observableList: Observable<Update<T>>
-    private let cellCreator: ((UICollectionView, IndexPath, T) -> UICollectionViewCell)
+    fileprivate var currentList: LazyCollection<[T]>?
+    fileprivate let observableList: Observable<Update<T>>
+    fileprivate let cellCreator: ((UICollectionView, IndexPath, T) -> UICollectionViewCell)
     
-    var disposable: Disposable!
+    fileprivate var disposable: Disposable!
     
     init(list: Observable<Update<T>>,
          cellCreator: @escaping ((UICollectionView, IndexPath, T) -> UICollectionViewCell)) {
@@ -81,6 +81,40 @@ private class ObservableListDataSource<T>: NSObject, UICollectionViewDataSource 
     }
 }
 
+private class SizingObservableListDataSource<T>: ObservableListDataSource<T>, UICollectionViewDelegateFlowLayout {
+    
+    fileprivate let cellSizer: ((IndexPath, T) -> CGSize)
+    
+    init(list: Observable<Update<T>>,
+         cellCreator: @escaping ((UICollectionView, IndexPath, T) -> UICollectionViewCell),
+         cellSizer: @escaping ((IndexPath, T) -> CGSize)) {
+        self.cellSizer = cellSizer
+        
+        super.init(list: list, cellCreator: cellCreator)
+    }
+    
+    func collectionView(_ collectionView: UICollectionView,
+                        layout collectionViewLayout: UICollectionViewLayout,
+                        sizeForItemAt indexPath: IndexPath) -> CGSize {
+        guard collectionView.numberOfSections > indexPath.section else {
+            return CGSize(width: 240.0, height: 240.0)
+        }
+        
+        guard collectionView.numberOfItems(inSection: indexPath.section) > indexPath.row else {
+            return CGSize(width: 240.0, height: 240.0)
+        }
+        
+        guard currentList?.count ?? 0 > indexPath.item else {
+            return CGSize(width: 240.0, height: 240.0)
+        }
+        
+        // swiftlint:disable:next force_unwrapping
+        let item = currentList![indexPath.item]
+        
+        return cellSizer(indexPath, item)
+    }
+}
+
 // swiftlint:disable line_length
 
 public extension Observable {
@@ -104,12 +138,29 @@ public extension ObservableList {
     
     func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
                                               reusing reuseIdentifier: String,
+                                              with adapter: @escaping ((CellType, IndexPath, T) -> CellType),
+                                              sizedBy sizer: @escaping ((IndexPath, T) -> CGSize)) -> Disposable {
+        return bind(to: collectionView,
+                    with: { collectionView, indexPath, value -> CellType in
+                        
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? CellType else {
+                            return CellType()
+                        }
+                        
+                        return adapter(cell, indexPath, value)
+                    },
+                    sizedBy: sizer)
+    }
+    
+    func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
+                                              reusing reuseIdentifier: String,
                                               with adapter: @escaping ((CellType, IndexPath, T) -> CellType)) -> Disposable {
         return bind(to: collectionView,
                     with: { collectionView, indexPath, value -> CellType in
                         
-                        // swiftlint:disable:next force_cast
-                        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! CellType
+                        guard let cell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as? CellType else {
+                            return CellType()
+                        }
                         
                         return adapter(cell, indexPath, value)
         })
@@ -121,6 +172,18 @@ public extension ObservableList {
         let disposable = dataSource.bind(to: collectionView)
         
         collectionView.dataSource = dataSource
+        
+        return AssociatedObjectDisposable(retaining: dataSource, disposing: disposable)
+    }
+    
+    func bind<CellType: UICollectionViewCell>(to collectionView: UICollectionView,
+                                              with adapter: @escaping ((UICollectionView, IndexPath, T) -> CellType),
+                                              sizedBy sizer: @escaping ((IndexPath, T) -> CGSize)) -> Disposable {
+        let dataSource = SizingObservableListDataSource(list: self.updates, cellCreator: adapter, cellSizer: sizer)
+        let disposable = dataSource.bind(to: collectionView)
+        
+        collectionView.dataSource = dataSource
+        collectionView.delegate = dataSource
         
         return AssociatedObjectDisposable(retaining: dataSource, disposing: disposable)
     }
