@@ -29,3 +29,15 @@ public extension ObservableList {
         return WrappedObservableList(updates.observeOn(scheduler))
     }
 }
+
+public extension Single {
+    public func flatMapList<U>(_ selector: @escaping (E) throws -> ObservableList<U>)
+        -> ObservableList<U> {
+            return WrappedObservableList(
+                self.asObservable()
+                    .flatMapLatest { value -> Observable<Update<U>> in
+                        // swiftlint:disable force_try
+                        return try! selector(value).updates
+                    })
+    }
+}

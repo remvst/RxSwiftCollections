@@ -85,6 +85,29 @@ class IndexedObservableListTest: QuickSpec {
                 disposeBag = DisposeBag()
             }
             
+            it("flat mapping") {
+                let subject = PublishSubject<Int>()
+                let mappedList = subject.asSingle().flatMapList { value -> ObservableList<Observable<String>> in
+                    inputList.append(12)
+                    
+                    return indexedList
+                }
+                let test = mappedList.updates.test(disposeBag: disposeBag)
+                
+                assert(test.values.isEmpty)
+                
+                subject.onNext(1)
+                subject.onCompleted()
+                
+                assert(test.awaitCount(1))
+                
+                let list = test.values[0].list
+                
+                expect(list.count) == 1
+                
+                expect(try? list[0].toBlocking().first()) == "-1 < 12 > -1"
+            }
+            
             it("supports single items") {
                 inputList.append(1)
                 
