@@ -403,6 +403,7 @@
 		A49BECCC811AA42FE2FDF71F52BCFF00 /* IGListDiff.h in Headers */ = {isa = PBXBuildFile; fileRef = 0158B7CFD6250C3B71055BAE7E250FCA /* IGListDiff.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A4D055244A630AFDD021986BAC6D7912 /* UIWebView+Rx.swift in Sources */ = {isa = PBXBuildFile; fileRef = BC15FBFC1DC7CB1F594D89B33B0D26FD /* UIWebView+Rx.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A510505149AAB43FC6B98C87431EDD26 /* ExampleGroup.swift in Sources */ = {isa = PBXBuildFile; fileRef = BB51B17E39E0131A16BB2B9AA04D0E63 /* ExampleGroup.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
+		A51A4DEA21485383005952F2 /* AlwaysReloadObservableList.swift in Sources */ = {isa = PBXBuildFile; fileRef = A51A4DE921485383005952F2 /* AlwaysReloadObservableList.swift */; };
 		A582474CB493B54DC2EDF92E082303BE /* IGListBindingSectionControllerSelectionDelegate.h in Headers */ = {isa = PBXBuildFile; fileRef = 67BDB73B1224C2C76FAF43CE75A69024 /* IGListBindingSectionControllerSelectionDelegate.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		A586D6C7057AD67899E5D1CBD492682A /* Dematerialize.swift in Sources */ = {isa = PBXBuildFile; fileRef = 6F8037EFAFF4B9FF8728354875F8C158 /* Dematerialize.swift */; settings = {COMPILER_FLAGS = "-w -Xanalyzer -analyzer-disable-all-checks"; }; };
 		A881B1AA711AE18417CAE0FF05E37912 /* IGListKit.h in Headers */ = {isa = PBXBuildFile; fileRef = D9E9EBB7D4ABA386D6AE92F80AF76FE1 /* IGListKit.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1148,6 +1149,7 @@
 		A4442564DD0A8D8C4C0264CFCA88A817 /* RxTarget.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RxTarget.swift; path = RxCocoa/Common/RxTarget.swift; sourceTree = "<group>"; };
 		A4AFE85F9F21B468957545DA8C6992C7 /* Platform.Darwin.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Platform.Darwin.swift; path = Platform/Platform.Darwin.swift; sourceTree = "<group>"; };
 		A4EA8441F695422F6BC0C3B50361855E /* IGListAdapterUpdateListener.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = IGListAdapterUpdateListener.h; path = Source/IGListAdapterUpdateListener.h; sourceTree = "<group>"; };
+		A51A4DE921485383005952F2 /* AlwaysReloadObservableList.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = AlwaysReloadObservableList.swift; path = RxSwiftCollections/Classes/AlwaysReloadObservableList.swift; sourceTree = "<group>"; };
 		A523133B90D08101BF87806081E407F9 /* RaisesException.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = RaisesException.swift; path = Sources/Nimble/Matchers/RaisesException.swift; sourceTree = "<group>"; };
 		A537E7378637FF7AD05631457887948C /* Binder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Binder.swift; path = RxCocoa/Common/Binder.swift; sourceTree = "<group>"; };
 		A56383EC87E15551ABE3DA1A37692B09 /* DeepDiff.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = DeepDiff.xcconfig; sourceTree = "<group>"; };
@@ -1961,6 +1963,7 @@
 				84C758CA34B5F2AF6E7529D08AD04DC2 /* Pod */,
 				1955421A6B5400B13857DEFCDC708C86 /* Support Files */,
 				784F829121279F0500F7C08E /* AssociatedObjectDisposable.swift */,
+				A51A4DE921485383005952F2 /* AlwaysReloadObservableList.swift */,
 			);
 			name = RxSwiftCollections;
 			path = ../..;
@@ -2815,6 +2818,7 @@
 				00C86CD8FED43AFA8786002B4DB18A32 /* DeepDiff-dummy.m in Sources */,
 				FCD1216A719E43040B34330C86257A60 /* DeepDiff.swift in Sources */,
 				59181022C1BA1A2354163AB78A7025B3 /* DiffAware.swift in Sources */,
+				A51A4DEA21485383005952F2 /* AlwaysReloadObservableList.swift in Sources */,
 				D05056ADCF6B7700663D068FCE4A3708 /* Heckel.swift in Sources */,
 				388F6596D559C81436B8638EE4B54625 /* IndexPathConverter.swift in Sources */,
 				77E5EEC2A31CF8EA4C6AAA8B10DB8837 /* MoveReducer.swift in Sources */,
